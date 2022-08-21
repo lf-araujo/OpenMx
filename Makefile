@@ -118,6 +118,16 @@ staging-prep: staging-clean
           echo '***'; fi
 	git archive --format=tar HEAD | (cd staging; tar -xf -)
 
+prep: staging-prep
+	$(REXEC) --slave --vanilla -f util/genSymbolTableHeader.R  > src/omxSymbolTable.h ; \
+	$(REXEC) --slave --vanilla -f util/genSymbolTableSource.R  > src/omxSymbolTable.cpp ; \
+	$(REXEC) --slave --vanilla -f util/copySymbolTable.R ; \
+  echo '#define HAS_NPSOL 0' > src/npsolswitch.h ; \
+  echo 'NPSOL_LIBS=' > src/Makevars.win.new ; \
+  cat src/Makevars.win.in >> src/Makevars.win.new ; \
+	mv src/Makevars.win.new src/Makevars.win ; \
+  cp .Rbuildignore.in .Rbuildignore
+
 cran-build: staging-prep
 	+cd staging && sh ./util/prep cran build && $(REXEC) CMD build .
 

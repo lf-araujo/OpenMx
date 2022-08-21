@@ -154,7 +154,6 @@ Collate:
     'MxDeparse.R'
     'MxCommunication.R'
     'MxRestore.R'
-    'MxVersion.R'
     'MxPPML.R'
     'MxRAMtoML.R'
     'MxErrorHandling.R'
